@@ -15,6 +15,6 @@ This project delivers a robust learning system designed to assist in the early d
 
 ### 🛠️ Technologies Used
 * **Data Manipulation:** Python, Pandas, NumPy
-* **Machine Learning:** Scikit-learn, XGBoost
+* **Machine Learning:** Scikit-learn, XGBoost, Adaboost, Decision Tree, Random Forest, Gradient Boosting
 * **Data Visualization:** Matplotlib, Seaborn
 * **Deployment:** Streamlit
