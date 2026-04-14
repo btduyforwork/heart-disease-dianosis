@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import streamlit as st
-from helper import predict_heart_disease
+from helper import predict_heart_disease, prediction_function
 
 
 st.set_page_config(
@@ -129,6 +129,14 @@ st.markdown(
         color: #333333;
         font-size: 1rem;
         font-weight: 800;
+    }
+    .model-panel-marker + div {
+        border: 1px solid #d8e1ee;
+        border-radius: 8px;
+        padding: 0.95rem 1rem 1rem;
+        margin-bottom: 1.2rem;
+        background: #ffffff;
+        box-shadow: 0 8px 20px rgba(48, 67, 92, 0.08);
     }
     .input-panel-marker + div {
         border: 1px solid #d8e1ee;
@@ -260,11 +268,23 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
+st.markdown('<div class="model-panel-marker"></div>', unsafe_allow_html=True)
+  
+
 input_col, result_col = st.columns([1.28, 1], gap="large")
 
 with input_col:
-    st.markdown('<div class="input-panel-marker"></div>', unsafe_allow_html=True)
-    with st.container():
+        st.markdown('<div class="input-panel-marker"></div>', unsafe_allow_html=True)
+        with st.container():
+            st.markdown('<div class="section-header">Prediction Model</div>', unsafe_allow_html=True)
+            selected_model = st.selectbox(
+            "Model",
+            [
+            "Random Forest",
+            "XGBoost",
+            "Gradient Boosting",
+            ],
+        )
         st.markdown('<div class="section-header">Demographics</div>', unsafe_allow_html=True)
         demographics_left, demographics_right = st.columns(2)
         with demographics_left:
@@ -397,8 +417,8 @@ profile = {
 
 
 if submitted:
-    prediction, probability = predict_heart_disease(profile)
-
+    prediction, probability = prediction_function(selected_model, profile)
+    prediction_function(selected_model, profile)
     if probability >= 0.65:
         assessment_title = "High Risk"
     elif probability >= 0.35:
