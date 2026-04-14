@@ -19,13 +19,13 @@ def load_random_forest_raw_data() -> dict:
     """Load the model and related data pipeline"""
     return joblib.load(RANDOM_FOREST_RAW_PATH)
 
-def predict_function(profile:dict[str,float], artifact:dict):
+def predict_heart_disease(profile:dict[str,float]):
+    artifact=load_random_forest_raw_data()
     pipeline=artifact["pipeline"]
     raw_input_df=pd.DataFrame([profile], columns=COLUMNS[:-1])
     prediction = int(pipeline.predict(raw_input_df)[0])
     prediction_prob=float(pipeline.predict_proba(raw_input_df)[0, 1])
-    print("Prediction: " + ("Heart Disease" if prediction > 0.5 else "No Heart Disease"))
-    print("Prediction Prob: " + str(prediction_prob))
+    return prediction, prediction_prob
 
 sample_profile = {
     "age": 54.0,
@@ -43,5 +43,4 @@ sample_profile = {
     "thal": 3.0,
 }
 
-artifact=load_random_forest_raw_data()
-predict_function(sample_profile, artifact)
+
