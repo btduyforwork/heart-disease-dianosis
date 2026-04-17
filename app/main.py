@@ -624,7 +624,7 @@ with result_col:
 </div>
 <div class="probability-row">
 <span>Heart Disease Probability</span>
-<span class="probability-value">{probability_text}</span>
+<span class="probability-value" style="color:{progress_color};">{probability_text}</span>
 	</div>
 	<div class="progress-track">
 	<div class="progress-fill" style="width:{progress_width}; background:{progress_color};"></div>
