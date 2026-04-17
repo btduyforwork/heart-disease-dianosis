@@ -313,6 +313,19 @@ st.markdown(
         background: #fa7315 !important;
         color: #ffffff !important;
     }
+    div[data-testid="stFormSubmitButton"] button {
+        border: 1px solid #fa7315 !important;
+        background: #fa7315 !important;
+        color: #ffffff !important;
+        font-weight: 800;
+    }
+    div[data-testid="stFormSubmitButton"] button:hover,
+    div[data-testid="stFormSubmitButton"] button:focus,
+    div[data-testid="stFormSubmitButton"] button:active {
+        border-color: #fa7315 !important;
+        background: #fa7315 !important;
+        color: #ffffff !important;
+    }
     div[data-testid="stAlert"] {
         border-radius: 8px;
     }
