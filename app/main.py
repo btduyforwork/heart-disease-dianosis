@@ -9,6 +9,24 @@ st.set_page_config(
 )
 load_artifact("Random Forest")
 
+if "is_predicting" not in st.session_state:
+    st.session_state.is_predicting = False
+if "prediction_result" not in st.session_state:
+    st.session_state.prediction_result = None
+
+
+def request_prediction() -> None:
+    st.session_state.is_predicting = True
+
+
+def assessment_from_probability(probability: float) -> str:
+    if probability >= 0.65:
+        return "High Risk"
+    if probability >= 0.35:
+        return "Moderate Risk"
+    return "Low Risk"
+
+
 def selectbox_value(label: str, options: dict[str, float]) -> float:
     selected_label = st.selectbox(label, list(options.keys()))
     return options[selected_label]
@@ -231,6 +249,34 @@ st.markdown(
         background: #ea580c !important;
         color: #ffffff !important;
     }
+    .prediction-button-loading {
+        width: 100%;
+        min-height: 2.75rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.65rem;
+        border: 1px solid #f97316;
+        border-radius: 8px;
+        background: #f97316;
+        color: #ffffff;
+        font-weight: 800;
+        cursor: not-allowed;
+        opacity: 0.82;
+    }
+    .prediction-button-spinner {
+        width: 1rem;
+        height: 1rem;
+        border: 2px solid rgba(255, 255, 255, 0.45);
+        border-top-color: #ffffff;
+        border-radius: 50%;
+        animation: prediction-spin 0.8s linear infinite;
+    }
+    @keyframes prediction-spin {
+        to {
+            transform: rotate(360deg);
+        }
+    }
     </style>
     """,
     unsafe_allow_html=True,
@@ -396,8 +442,6 @@ with input_col:
                 },
             )
 
-submitted = st.button("Analyse Patient", use_container_width=True)
-
 profile = {
     "age": float(age),
     "sex": sex,
@@ -414,17 +458,37 @@ profile = {
     "thal": thal,
 }
 
+button_placeholder = st.empty()
+if st.session_state.is_predicting:
+    button_placeholder.markdown(
+        """
+        <button class="prediction-button-loading" type="button" aria-label="Analysing patient" disabled>
+            <span class="prediction-button-spinner" aria-hidden="true"></span>
+        </button>
+        """,
+        unsafe_allow_html=True,
+    )
+else:
+    button_placeholder.button(
+        "Analyse Patient",
+        use_container_width=True,
+        on_click=request_prediction,
+    )
 
-if submitted:
-    with st.spinner("Running prediction..."):
-        prediction, probability = prediction_function(selected_model, profile)
-        if probability >= 0.65:
-            assessment_title = "High Risk"
-        elif probability >= 0.35:
-            assessment_title = "Moderate Risk"
-        else:
-            assessment_title = "Low Risk"
+if st.session_state.is_predicting:
+    prediction, probability = prediction_function(selected_model, profile)
+    st.session_state.prediction_result = {
+        "prediction": prediction,
+        "probability": probability,
+        "assessment_title": assessment_from_probability(probability),
+    }
+    st.session_state.is_predicting = False
+    st.rerun()
 
+if st.session_state.prediction_result is not None:
+    prediction = st.session_state.prediction_result["prediction"]
+    probability = st.session_state.prediction_result["probability"]
+    assessment_title = st.session_state.prediction_result["assessment_title"]
     probability_text = f"{probability:.1%}"
     progress_width = f"{probability * 100:.1f}%"
 else:
