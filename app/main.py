@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import streamlit as st
-from helper import predict_heart_disease, prediction_function
+from helper import prediction_function
 
 
 st.set_page_config(
@@ -418,7 +418,6 @@ profile = {
 
 if submitted:
     prediction, probability = prediction_function(selected_model, profile)
-    prediction_function(selected_model, profile)
     if probability >= 0.65:
         assessment_title = "High Risk"
     elif probability >= 0.35:

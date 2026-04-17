@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
+import streamlit as st
 import joblib
 import pandas as pd
 import json
@@ -21,7 +22,7 @@ MODEL_PATHS={
     "Gradient Boosting":TRAINED_MODEL_DIR / "gradient_boosting.joblib",
 }
 
-
+@st.cache_resource
 def load_random_forest_raw_data() -> dict:
     """Load the model and related data pipeline"""
     return joblib.load(RANDOM_FOREST_RAW_PATH)
