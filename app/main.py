@@ -116,6 +116,18 @@ def assessment_from_probability(probability: float) -> str:
     return "Low Risk"
 
 
+def probability_color(probability: float) -> str:
+    if probability >= 0.8:
+        return "#e49ba0"
+    if probability >= 0.6:
+        return "#eead98"
+    if probability >= 0.4:
+        return "#efc28f"
+    if probability >= 0.2:
+        return "#bfd29c"
+    return "#9fcca6"
+
+
 def selectbox_value(label: str, options: dict[str, float]) -> float:
     selected_label = st.selectbox(label, list(options.keys()))
     return options[selected_label]
@@ -315,7 +327,8 @@ st.markdown(
         width: 0%;
         height: 100%;
         border-radius: 8px;
-        background: #6f9d3f;
+        background: #9fcca6;
+        transition: width 0.35s ease, background-color 0.35s ease;
     }
     .assessment-note {
         border-left: 3px solid #6f9d3f;
@@ -580,12 +593,14 @@ if st.session_state.prediction_result is not None:
     assessment_title = st.session_state.prediction_result["assessment_title"]
     probability_text = f"{probability:.1%}"
     progress_width = f"{probability * 100:.1f}%"
+    progress_color = probability_color(probability)
 else:
     prediction = None
     probability = 0.0
     assessment_title = "Ready For Input"
     probability_text = "--"
     progress_width = "0%"
+    progress_color = "#9fcca6"
 
 with result_col:
     st.markdown(
@@ -610,10 +625,10 @@ with result_col:
 <div class="probability-row">
 <span>Heart Disease Probability</span>
 <span class="probability-value">{probability_text}</span>
-</div>
-<div class="progress-track">
-<div class="progress-fill" style="width:{progress_width};"></div>
-</div>
+	</div>
+	<div class="progress-track">
+	<div class="progress-fill" style="width:{progress_width}; background:{progress_color};"></div>
+	</div>
 <div class="assessment-note">
 Complete the patient values and analyse the profile. This result is for educational use only.
 </div>
