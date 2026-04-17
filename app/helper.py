@@ -8,7 +8,6 @@ import pandas as pd
 import json
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-RAW_DATA_PATH = PROJECT_ROOT / "notebooks" / "cleveland.csv"
 TRAINED_MODEL_DIR = PROJECT_ROOT / "models" / "trained_models"
 RANDOM_FOREST_RAW_PATH = TRAINED_MODEL_DIR / "randomforest_raw.joblib"
 COLUMNS = [
@@ -23,10 +22,12 @@ MODEL_PATHS={
 }
 
 @st.cache_resource
+def load_artifact(model_selected: str):
+    model_path = MODEL_PATHS[model_selected]
+    return joblib.load(model_path)
 
 def prediction_function(model_selected, profile):
-    model_path=MODEL_PATHS[model_selected]
-    artifact=joblib.load(model_path)
+    artifact=load_artifact(model_selected)
     pipeline=artifact["pipeline"]
     raw_input_df=pd.DataFrame([profile], columns=COLUMNS[:-1])
     prediction = int(pipeline.predict(raw_input_df)[0])

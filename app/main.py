@@ -1,14 +1,13 @@
 from __future__ import annotations
 
 import streamlit as st
-from helper import prediction_function
-
+from helper import prediction_function, load_artifact
 
 st.set_page_config(
     page_title="Heart Disease Prediction",
     layout="wide",
 )
-
+load_artifact("Random Forest")
 
 def selectbox_value(label: str, options: dict[str, float]) -> float:
     selected_label = st.selectbox(label, list(options.keys()))
@@ -417,13 +416,14 @@ profile = {
 
 
 if submitted:
-    prediction, probability = prediction_function(selected_model, profile)
-    if probability >= 0.65:
-        assessment_title = "High Risk"
-    elif probability >= 0.35:
-        assessment_title = "Moderate Risk"
-    else:
-        assessment_title = "Low Risk"
+    with st.spinner("Running prediction..."):
+        prediction, probability = prediction_function(selected_model, profile)
+        if probability >= 0.65:
+            assessment_title = "High Risk"
+        elif probability >= 0.35:
+            assessment_title = "Moderate Risk"
+        else:
+            assessment_title = "Low Risk"
 
     probability_text = f"{probability:.1%}"
     progress_width = f"{probability * 100:.1f}%"
