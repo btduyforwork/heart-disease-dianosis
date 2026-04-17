@@ -8,9 +8,10 @@ st.set_page_config(
     layout="wide",
 )
 
-page_loader = st.empty()
-page_loader.markdown(
-    """
+if "artifact_ready" not in st.session_state:
+    st.session_state.artifact_ready = False
+
+PAGE_LOADER_HTML = """
     <style>
     .app-loader-shell {
         min-height: 70vh;
@@ -92,11 +93,17 @@ page_loader.markdown(
             </div>
         </div>
     </div>
-    """,
-    unsafe_allow_html=True,
-)
+"""
+
+page_loader = None
+if not st.session_state.artifact_ready:
+    page_loader = st.empty()
+    page_loader.markdown(PAGE_LOADER_HTML, unsafe_allow_html=True)
+
 load_artifact("Random Forest")
-page_loader.empty()
+if page_loader is not None:
+    st.session_state.artifact_ready = True
+    page_loader.empty()
 
 if "is_predicting" not in st.session_state:
     st.session_state.is_predicting = False
