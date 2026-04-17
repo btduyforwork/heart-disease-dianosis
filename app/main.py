@@ -151,6 +151,9 @@ st.markdown(
         color: #222222;
         font-family: "Segoe UI", Arial, sans-serif;
     }
+    [data-stale="true"] {
+        opacity: 1 !important;
+    }
     .block-container {
         max-width: 1220px;
         padding-top: 2.2rem;
