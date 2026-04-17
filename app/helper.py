@@ -29,7 +29,7 @@ COLUMNS = [
 ]
 MODEL_PATHS={
     "Random Forest":TRAINED_MODEL_DIR / "randomforest_raw.joblib",
-    "XGBoost":TRAINED_MODEL_DIR / "xgboost.joblib",
+    "XGBoost":TRAINED_MODEL_DIR / "xgboost_fe_dt.joblib",
     "Gradient Boosting":TRAINED_MODEL_DIR / "gradientboosting_fe_dt.joblib",
 }
 
