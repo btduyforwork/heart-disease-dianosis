@@ -14,7 +14,9 @@ if "artifact_ready" not in st.session_state:
 PAGE_LOADER_HTML = """
     <style>
     .app-loader-shell {
-        min-height: 70vh;
+        position: fixed;
+        inset: 0;
+        z-index: 999999;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -27,6 +29,7 @@ PAGE_LOADER_HTML = """
         justify-items: center;
         gap: 0.85rem;
         padding: 1.4rem 1.8rem;
+        transform: translateY(-2vh);
     }
     .app-loader-heart {
         width: 4.5rem;
@@ -428,17 +431,18 @@ st.markdown('<div class="model-panel-marker"></div>', unsafe_allow_html=True)
 input_col, result_col = st.columns([1.28, 1], gap="large")
 
 with input_col:
-        st.markdown('<div class="input-panel-marker"></div>', unsafe_allow_html=True)
-        with st.container():
-            st.markdown('<div class="section-header">Prediction Model</div>', unsafe_allow_html=True)
-            selected_model = st.selectbox(
+    st.markdown('<div class="input-panel-marker"></div>', unsafe_allow_html=True)
+    with st.form("patient_profile_form"):
+        st.markdown('<div class="section-header">Prediction Model</div>', unsafe_allow_html=True)
+        selected_model = st.selectbox(
             "Model",
             [
-            "Random Forest",
-            "XGBoost",
-            "Gradient Boosting",
+                "Random Forest",
+                "XGBoost",
+                "Gradient Boosting",
             ],
         )
+
         st.markdown('<div class="section-header">Demographics</div>', unsafe_allow_html=True)
         demographics_left, demographics_right = st.columns(2)
         with demographics_left:
@@ -551,47 +555,62 @@ with input_col:
                 },
             )
 
-profile = {
-    "age": float(age),
-    "sex": sex,
-    "cp": cp,
-    "trestbps": float(trestbps),
-    "chol": float(chol),
-    "fbs": fbs,
-    "restecg": restecg,
-    "thalach": float(thalach),
-    "exang": exang,
-    "oldpeak": float(oldpeak),
-    "slope": slope,
-    "ca": float(ca),
-    "thal": thal,
-}
+        profile = {
+            "age": float(age),
+            "sex": sex,
+            "cp": cp,
+            "trestbps": float(trestbps),
+            "chol": float(chol),
+            "fbs": fbs,
+            "restecg": restecg,
+            "thalach": float(thalach),
+            "exang": exang,
+            "oldpeak": float(oldpeak),
+            "slope": slope,
+            "ca": float(ca),
+            "thal": thal,
+        }
 
-button_placeholder = st.empty()
-if st.session_state.is_predicting:
-    button_placeholder.markdown(
-        """
-        <button class="prediction-button-loading" type="button" aria-label="Analysing patient" disabled>
-            <span class="prediction-button-spinner" aria-hidden="true"></span>
-        </button>
-        """,
-        unsafe_allow_html=True,
-    )
-else:
-    button_placeholder.button(
-        "Analyse Patient",
-        use_container_width=True,
-        on_click=request_prediction,
-    )
+        if st.session_state.is_predicting:
+            st.markdown(
+                """
+                <button class="prediction-button-loading" type="button" aria-label="Analysing patient" disabled>
+                    <span class="prediction-button-spinner" aria-hidden="true"></span>
+                </button>
+                """,
+                unsafe_allow_html=True,
+            )
+            submitted = False
+        else:
+            submitted = st.form_submit_button("Analyse Patient", use_container_width=True)
+
+if submitted:
+    st.session_state.pending_prediction = {
+        "model": selected_model,
+        "profile": profile,
+    }
+    request_prediction()
+    st.rerun()
 
 if st.session_state.is_predicting:
-    prediction, probability = prediction_function(selected_model, profile)
+    pending_prediction = st.session_state.get(
+        "pending_prediction",
+        {
+            "model": selected_model,
+            "profile": profile,
+        },
+    )
+    prediction, probability = prediction_function(
+        pending_prediction["model"],
+        pending_prediction["profile"],
+    )
     st.session_state.prediction_result = {
         "prediction": prediction,
         "probability": probability,
         "assessment_title": assessment_from_probability(probability),
     }
     st.session_state.is_predicting = False
+    st.session_state.pop("pending_prediction", None)
     st.rerun()
 
 if st.session_state.prediction_result is not None:
