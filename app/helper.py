@@ -23,17 +23,6 @@ MODEL_PATHS={
 }
 
 @st.cache_resource
-def load_random_forest_raw_data() -> dict:
-    """Load the model and related data pipeline"""
-    return joblib.load(RANDOM_FOREST_RAW_PATH)
-
-def predict_heart_disease(profile:dict[str,float]):
-    artifact=load_random_forest_raw_data()
-    pipeline=artifact["pipeline"]
-    raw_input_df=pd.DataFrame([profile], columns=COLUMNS[:-1])
-    prediction = int(pipeline.predict(raw_input_df)[0])
-    prediction_prob=float(pipeline.predict_proba(raw_input_df)[0, 1])
-    return prediction, prediction_prob
 
 def prediction_function(model_selected, profile):
     model_path=MODEL_PATHS[model_selected]
