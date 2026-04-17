@@ -7,7 +7,96 @@ st.set_page_config(
     page_title="Heart Disease Prediction",
     layout="wide",
 )
+
+page_loader = st.empty()
+page_loader.markdown(
+    """
+    <style>
+    .app-loader-shell {
+        min-height: 70vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #ffffff;
+        color: #2d3748;
+        font-family: "Segoe UI", Arial, sans-serif;
+    }
+    .app-loader {
+        display: grid;
+        justify-items: center;
+        gap: 0.85rem;
+        padding: 1.4rem 1.8rem;
+    }
+    .app-loader-heart {
+        width: 4.5rem;
+        height: 4.5rem;
+        display: grid;
+        place-items: center;
+        border-radius: 50%;
+        background: #fff3ed;
+        color: #f97316;
+        font-size: 2.1rem;
+        box-shadow: 0 12px 28px rgba(249, 115, 22, 0.18);
+        animation: app-loader-pulse 1.1s ease-in-out infinite;
+    }
+    .app-loader-title {
+        color: #2f6db5;
+        font-size: 1.1rem;
+        font-weight: 800;
+        letter-spacing: 0;
+    }
+    .app-loader-dots {
+        display: flex;
+        gap: 0.38rem;
+    }
+    .app-loader-dots span {
+        width: 0.48rem;
+        height: 0.48rem;
+        border-radius: 50%;
+        background: #f97316;
+        animation: app-loader-bounce 0.9s ease-in-out infinite;
+    }
+    .app-loader-dots span:nth-child(2) {
+        animation-delay: 0.14s;
+    }
+    .app-loader-dots span:nth-child(3) {
+        animation-delay: 0.28s;
+    }
+    @keyframes app-loader-pulse {
+        0%, 100% {
+            transform: scale(1);
+        }
+        50% {
+            transform: scale(1.08);
+        }
+    }
+    @keyframes app-loader-bounce {
+        0%, 100% {
+            transform: translateY(0);
+            opacity: 0.45;
+        }
+        50% {
+            transform: translateY(-0.35rem);
+            opacity: 1;
+        }
+    }
+    </style>
+    <div class="app-loader-shell">
+        <div class="app-loader" role="status" aria-live="polite">
+            <div class="app-loader-heart">&#9829;</div>
+            <div class="app-loader-title">Preparing your heart check</div>
+            <div class="app-loader-dots" aria-hidden="true">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
 load_artifact("Random Forest")
+page_loader.empty()
 
 if "is_predicting" not in st.session_state:
     st.session_state.is_predicting = False

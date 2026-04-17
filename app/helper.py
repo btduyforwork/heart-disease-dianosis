@@ -21,7 +21,7 @@ MODEL_PATHS={
     "Gradient Boosting":TRAINED_MODEL_DIR / "gradient_boosting.joblib",
 }
 
-@st.cache_resource
+@st.cache_resource(show_spinner=False)
 def load_artifact(model_selected: str):
     model_path = MODEL_PATHS[model_selected]
     return joblib.load(model_path)
@@ -52,5 +52,4 @@ def prediction_function(model_selected, profile):
 #     "ca": 0.0,
 #     "thal": 3.0,
 # }
-
 
