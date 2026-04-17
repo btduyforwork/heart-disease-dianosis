@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import streamlit as st
-from helper import prediction_function, load_artifact
 
 st.set_page_config(
     page_title="Heart Disease Prediction",
@@ -103,6 +102,8 @@ if not st.session_state.artifact_ready:
     page_loader = st.empty()
     page_loader.markdown(PAGE_LOADER_HTML, unsafe_allow_html=True)
 
+from helper import prediction_function, load_artifact
+
 load_artifact("Random Forest")
 if page_loader is not None:
     st.session_state.artifact_ready = True
@@ -153,6 +154,80 @@ st.markdown(
     }
     [data-stale="true"] {
         opacity: 1 !important;
+    }
+    .app-rerun-loader-shell {
+        position: fixed;
+        inset: 0;
+        z-index: 999998;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        background: #ffffff;
+        color: #2d3748;
+        font-family: "Segoe UI", Arial, sans-serif;
+    }
+    body:has([data-stale="true"]) .app-rerun-loader-shell {
+        display: flex;
+    }
+    .app-loader {
+        display: grid;
+        justify-items: center;
+        gap: 0.85rem;
+        padding: 1.4rem 1.8rem;
+        transform: translateY(-2vh);
+    }
+    .app-loader-heart {
+        width: 4.5rem;
+        height: 4.5rem;
+        display: grid;
+        place-items: center;
+        border-radius: 50%;
+        background: #fff3ed;
+        color: #f97316;
+        font-size: 2.1rem;
+        box-shadow: 0 12px 28px rgba(249, 115, 22, 0.18);
+        animation: app-loader-pulse 1.1s ease-in-out infinite;
+    }
+    .app-loader-title {
+        color: #2f6db5;
+        font-size: 1.1rem;
+        font-weight: 800;
+        letter-spacing: 0;
+    }
+    .app-loader-dots {
+        display: flex;
+        gap: 0.38rem;
+    }
+    .app-loader-dots span {
+        width: 0.48rem;
+        height: 0.48rem;
+        border-radius: 50%;
+        background: #f97316;
+        animation: app-loader-bounce 0.9s ease-in-out infinite;
+    }
+    .app-loader-dots span:nth-child(2) {
+        animation-delay: 0.14s;
+    }
+    .app-loader-dots span:nth-child(3) {
+        animation-delay: 0.28s;
+    }
+    @keyframes app-loader-pulse {
+        0%, 100% {
+            transform: scale(1);
+        }
+        50% {
+            transform: scale(1.08);
+        }
+    }
+    @keyframes app-loader-bounce {
+        0%, 100% {
+            transform: translateY(0);
+            opacity: 0.45;
+        }
+        50% {
+            transform: translateY(-0.35rem);
+            opacity: 1;
+        }
     }
     .block-container {
         max-width: 1220px;
@@ -228,14 +303,14 @@ st.markdown(
     }
     .stButton button {
         border-radius: 8px;
-        border: 1px solid #f97316 !important;
-        background: #f97316 !important;
+        border: 1px solid #fa7315 !important;
+        background: #fa7315 !important;
         color: #ffffff !important;
         font-weight: 800;
     }
     .stButton button:hover {
-        border-color: #ea580c !important;
-        background: #ea580c !important;
+        border-color: #fa7315 !important;
+        background: #fa7315 !important;
         color: #ffffff !important;
     }
     div[data-testid="stAlert"] {
@@ -354,14 +429,14 @@ st.markdown(
         line-height: 1.5;
     }
     .stButton button[kind="secondary"] {
-        border-color: #f97316 !important;
-        background: #f97316 !important;
+        border-color: #fa7315 !important;
+        background: #fa7315 !important;
         color: #ffffff !important;
         font-weight: 800;
     }
     .stButton button[kind="secondary"]:hover {
-        border-color: #ea580c !important;
-        background: #ea580c !important;
+        border-color: #fa7315 !important;
+        background: #fa7315 !important;
         color: #ffffff !important;
     }
     .prediction-button-loading {
@@ -371,9 +446,9 @@ st.markdown(
         align-items: center;
         justify-content: center;
         gap: 0.65rem;
-        border: 1px solid #f97316;
+        border: 1px solid #fa7315;
         border-radius: 8px;
-        background: #f97316;
+        background: #fa7315;
         color: #ffffff;
         font-weight: 800;
         cursor: not-allowed;
@@ -393,6 +468,17 @@ st.markdown(
         }
     }
     </style>
+    <div class="app-rerun-loader-shell">
+        <div class="app-loader" role="status" aria-live="polite">
+            <div class="app-loader-heart">&#9829;</div>
+            <div class="app-loader-title">Preparing your heart check</div>
+            <div class="app-loader-dots" aria-hidden="true">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </div>
     """,
     unsafe_allow_html=True,
 )
