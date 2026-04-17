@@ -1,7 +1,19 @@
 from __future__ import annotations
+from pathlib import Path
+import sys
 
 import streamlit as st
+PROJECT_ROOT = Path.cwd().resolve()
 
+while PROJECT_ROOT.name != "heart-disease-dianosis" and PROJECT_ROOT != PROJECT_ROOT.parent:
+    PROJECT_ROOT = PROJECT_ROOT.parent
+
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+    
+from app.preprocessing import (
+    AddNewFeaturesTransformer,to_feature_dataframe,select_feature_columns
+)
 st.set_page_config(
     page_title="Heart Disease Prediction",
     layout="wide",
