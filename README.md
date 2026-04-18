@@ -18,3 +18,54 @@ This project delivers a robust learning system designed to assist in the early d
 * **Machine Learning:** Scikit-learn, XGBoost, Random Forest, Gradient Boosting
 * **Data Visualization:** Matplotlib, Seaborn
 * **Deployment:** Streamlit
+### Run Locally
+
+Follow the steps below to run the Heart Disease Diagnosis Streamlit app on your local machine.
+
+#### macOS / Linux
+
+```bash
+# 1. Clone the repository
+git clone https://github.com/btduyforwork/heart-disease-dianosis.git
+
+# 2. Move into the project folder
+cd heart-disease-dianosis
+
+# 3. Create a virtual environment
+python3 -m venv venv
+
+# 4. Activate the virtual environment
+source venv/bin/activate
+
+# 5. Upgrade pip
+python3 -m pip install --upgrade pip
+
+# 6. Install required packages
+pip install -r requirements.txt
+
+# 7. Run the Streamlit app
+python3 -m streamlit run app/main.py
+```
+#### Windows
+```bash
+# 1. Clone the repository
+git clone https://github.com/btduyforwork/heart-disease-dianosis.git
+
+# 2. Move into the project folder
+cd heart-disease-dianosis
+
+# 3. Create a virtual environment
+python -m venv venv
+
+# 4. Activate the virtual environment
+venv\Scripts\Activate.ps1
+
+# 5. Upgrade pip
+python -m pip install --upgrade pip
+
+# 6. Install required packages
+pip install -r requirements.txt
+
+# 7. Run the Streamlit app
+python -m streamlit run app/main.py
+
