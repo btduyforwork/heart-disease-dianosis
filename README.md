@@ -18,7 +18,7 @@ This project delivers a robust learning system designed to assist in the early d
 * **Machine Learning:** Scikit-learn, XGBoost, Random Forest, Gradient Boosting
 * **Data Visualization:** Matplotlib, Seaborn
 * **Deployment:** Streamlit
-### Run Locally
+### 💻 Run Locally
 
 Follow the steps below to run the Heart Disease Diagnosis Streamlit app on your local machine.
 
